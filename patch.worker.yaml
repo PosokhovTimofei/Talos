@@ -1,0 +1,28 @@
+machine:
+  type: worker
+  network:
+    hostname: worker-01
+    interfaces:
+      - interface: enp0s1    # Cетевой интерфейс
+        addresses: 
+          - 192.168.50.121/24  # Статический IP для worker ноды
+        routes:
+          - network: 0.0.0.0/0
+            gateway: 192.168.50.1  
+        dhcp: false
+    nameservers:
+      - 8.8.8.8
+      - 8.8.4.4
+  time:
+    disabled: false
+    servers:
+      - pool.ntp.org
+      - time.google.com
+    bootTimeout: 2m0s
+  install:
+    disk: /dev/vda          # Диск для установки
+    image: factory.talos.dev/installer/376567988ad370138ad8b2698212367b8edcb69b5fd68c80be1f2ec7d603b4ba:v1.10.7
+    wipe: true
+  kubelet:
+    clusterDNS:
+      - 10.96.0.10
